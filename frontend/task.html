@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup Page</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        padding: 50px;
+        box-sizing: border-box;
+      }
+
+      .main {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 100vh;
+        border: 1px solid #ccc;
+      }
+
+      #left-side {
+        flex: 1;
+        width: 50%;
+        height: 100%;
+        /* overflow: hidden; */
+        position: relative;
+      }
+
+      #right-side {
+        flex: 1;
+        width: 50%;
+        /* margin: 50px; */
+        border-radius: 5px;
+      }
+
+      .section-header {
+        color: #4806f0;
+      }
+
+      .section-title {
+        font-size: xxx-large;
+      }
+
+      .section-subtitle {
+        font-size: 16px;
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .signin-button {
+        border: 2px solid #0800ff;
+        background-color: #fff;
+        color: #0800ff;
+        font-weight: bold;
+        width: 150px;
+        padding: 10px;
+      }
+
+      .input-group {
+        display: flex;
+        gap: 10px;
+      }
+
+      .input-field {
+        width: 100%;
+        padding: 15px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      .get-started-button {
+        background-color: #0800ff;
+        color: #fff;
+        padding: 15px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+      }
+      .left-img {
+        margin-left: 40px;
+        margin-bottom: 40px;
+        height: 50vh;
+      }
+      .left-text {
+        width: 75%;
+        position: absolute;
+        bottom: 0;
+        color: #fff;
+        left: 0;
+        background-color: rgba(23, 23, 23, 0.754);
+        padding: 65px;
+        padding-bottom: 100px;
+        text-align: center;
+      }
+      img {
+        width: 100%;
+        height: 190%;
+      }
+      .right-container {
+        padding: 50px;
+      }
+      .error-message{
+        color: red;
+        font-size: smaller;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div id="left-side">
+        <div class="left-img">
+          <img
+            class="img"
+            src="https://w0.peakpx.com/wallpaper/557/144/HD-wallpaper-airplane-view-aeroplane-aeroplanes-air-galaxy-mountains-note-phone-plane-planes.jpg"
+            alt="Left Image"
+          />
+        </div>
+        <div class="left-text">
+          <h1 class="section-title">
+            Altit<span
+              style="text-decoration: underline; text-underline-offset: 0.3em"
+              >ud</span
+            >e Air
+          </h1>
+
+          <p style="font-size: small">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facilis
+            quibusdam deserunt suscipit ea porro? Ipsa enim minus error.
+            Veritatis quasi architecto, ab, veniam rerum adipisci commodi minus
+            eaque voluptatibus magni molestiae nisi pariatur recusandae sint
+            aperiam delectus nulla. Inventore, accusantium?
+          </p>
+        </div>
+      </div>
+      <div id="right-side">
+        <div class="right-container">
+          <div class="button-container">
+            <button class="signin-button">SIGN IN</button>
+          </div>
+          <div class="section-header">
+            <h1 class="section-title">Explore and Experience</h1>
+            <h4 class="section-subtitle">
+              Get onto your most comfortable journey yet. All the way up.
+            </h4>
+          </div>
+          <form id="signup-form">
+            <div class="input-group">
+              <input
+                class="input-field"
+                placeholder="First Name"
+                type="text"
+                id="firstName"
+                name="firstName"
+                required
+              />
+              <input
+                class="input-field"
+                placeholder="Last Name"
+                type="text"
+                id="lastName"
+                name="lastName"
+                required
+              />
+            </div>
+            <input
+              class="input-field"
+              placeholder="Email"
+              type="email"
+              id="email"
+              name="email"
+              required
+            />
+            <input
+              class="input-field"
+              placeholder="UserName"
+              type="text"
+              id="userName"
+              name="userName"
+              required
+            />
+            <input
+              class="input-field"
+              placeholder="Password"
+              type="password"
+              id="password"
+              name="password"
+              required
+            />
+            <input
+              class="input-field"
+              placeholder="Confirm Password"
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              required
+            />
+            <span id="password-error" class="error-message"></span>
+            <button
+              class="get-started-button"
+              type="submit"
+              value="Submit"
+              id="signup-button"
+            >
+              GET STARTED
+            </button>
+          </form>
+          <div id="signup-response"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function handleSubmit(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+
+        const formObject = {};
+        formData.forEach((value, key) => {
+          formObject[key] = value;
+        });
+
+        const password = formObject.password;
+        const confirmPassword = formObject.confirmPassword;
+
+        if (password !== confirmPassword) {
+          document.getElementById("password-error").textContent =
+            "Password and Confirm Password do not match";
+          return; 
+        } else {
+          document.getElementById("password-error").textContent = "";
+        }
+
+        fetch("http://localhost:4000/auth/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            data: JSON.stringify({ formObject }),
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data)
+            document.getElementById("signup-form").style.display = "none";
+            document.getElementById("signup-response").innerText = data.result?JSON.stringify(data.result, null, 2):data.message;
+          })
+          .catch((error) => {
+            document.getElementById("signup-response").innerText =
+              "An error occurred while signing up.";
+          });
+        console.log(formObject);
+      }
+
+      const myForm = document.getElementById("signup-form");
+      myForm.addEventListener("submit", handleSubmit);
+    </script>
+  </body>
+</html>
+
